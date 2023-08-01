@@ -1,19 +1,19 @@
-package com.example.application.views.quizViews;
+package com.example.application.views.list;
 
 import com.example.application.data.entity.QuestionSet;
 import com.example.application.data.service.QuizSystemService;
 import com.example.application.views.MainLayout;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
+
+import java.util.Collections;
 
 @PageTitle("Home")
 @Route(value = "home", layout = MainLayout.class)
@@ -21,18 +21,21 @@ import com.vaadin.flow.router.RouteAlias;
 public class HomeView extends VerticalLayout {
     Grid<QuestionSet> grid = new Grid<>(QuestionSet.class);
     TextField filterText = new TextField();
+    QuizForm form;
     QuizSystemService service;
 
     public HomeView(QuizSystemService service) {
         addClassName("list-view");
         setSizeFull();
         configureGrid();
+        configureForm();
         add(getToolbar(), getContent());
     }
 
     private HorizontalLayout getContent() {
-        HorizontalLayout content = new HorizontalLayout(grid);
+        HorizontalLayout content = new HorizontalLayout(grid, form);
         content.setFlexGrow(2, grid);
+        content.setFlexGrow(1, form);
         content.addClassName("content");
         content.setSizeFull();
         return content;
@@ -47,6 +50,11 @@ public class HomeView extends VerticalLayout {
            return startButton;
         });
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+    }
+
+    private void configureForm() {
+        form = new QuizForm(Collections.emptyList());
+        form.setWidth("25em");
     }
 
     private HorizontalLayout getToolbar() {

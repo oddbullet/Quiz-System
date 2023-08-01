@@ -23,6 +23,10 @@ public class QuestionSet {
 
     private int numberOfQuestion;
 
+    public QuestionSet() {
+
+    }
+
     public QuestionSet(String name) {
         this.name = name;
     }

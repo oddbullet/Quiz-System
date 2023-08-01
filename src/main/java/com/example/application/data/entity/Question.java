@@ -27,6 +27,10 @@ public class Question {
     @Column(nullable = false)
     private String wrongText3;
 
+    public Question() {
+
+    }
+
     public Question(String questionText, String correctText, String wrongText1, String wrongText2, String wrongText3) {
         this.questionText = questionText;
         this.correctText = correctText;

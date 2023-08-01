@@ -1,9 +1,10 @@
-package com.example.application.data;
+package com.example.application.data.entity;
 
 
 import jakarta.persistence.*;
 
 @Entity
+@Table
 public class Question {
 
     @Id

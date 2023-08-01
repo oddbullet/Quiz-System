@@ -1,4 +1,4 @@
-package com.example.application.data;
+package com.example.application.data.entity;
 
 import jakarta.persistence.*;
 
@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table
 public class QuestionSet {
 
     @Id

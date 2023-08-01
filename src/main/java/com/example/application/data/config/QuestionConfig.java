@@ -20,6 +20,8 @@ public class QuestionConfig {
         return args -> {
             System.out.println("Command line running...");
             Set<Question> one = new HashSet<>();
+            Set<Question> two = new HashSet<>();
+
             Question q1 = new Question("What is your name?",
                     "Bill",
                     "Eric",
@@ -27,9 +29,26 @@ public class QuestionConfig {
                     "Ahoy"
 
             );
-            one.add(q1);
+            Question q2 = new Question("What is your age?",
+                    "12",
+                    "23",
+                    "45",
+                    "20"
+
+            );
+            Question q3 = new Question("What is your height?",
+                    "6 ft",
+                    "5 ft",
+                    "5 ft 11 in",
+                    "5 ft 4in"
+
+            );
+            one.addAll(List.of(q1, q2));
+            two.addAll(List.of(q1, q2, q3));
+
             QuestionSet oneSet = new QuestionSet("Set One", one, one.size());
-            repository.save(oneSet);
+            QuestionSet twoSet = new QuestionSet("Set two", two, two.size());
+            repository.saveAll(List.of(oneSet, twoSet));
         };
     }
 }

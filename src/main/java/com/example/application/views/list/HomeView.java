@@ -25,11 +25,15 @@ public class HomeView extends VerticalLayout {
     QuizSystemService service;
 
     public HomeView(QuizSystemService service) {
+        this.service = service;
+
         addClassName("list-view");
         setSizeFull();
         configureGrid();
         configureForm();
         add(getToolbar(), getContent());
+
+        updateList();
     }
 
     private HorizontalLayout getContent() {
@@ -65,5 +69,9 @@ public class HomeView extends VerticalLayout {
         Button newSetButton = new Button("New Set");
         var toolbar = new HorizontalLayout(filterText, newSetButton);
         return toolbar;
+    }
+
+    private void updateList() {
+        grid.setItems(service.findAllSet());
     }
 }

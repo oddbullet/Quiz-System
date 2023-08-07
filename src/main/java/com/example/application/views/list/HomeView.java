@@ -37,9 +37,9 @@ public class HomeView extends VerticalLayout {
     }
 
     private HorizontalLayout getContent() {
-        HorizontalLayout content = new HorizontalLayout(grid, form);
-        content.setFlexGrow(2, grid);
-        content.setFlexGrow(1, form);
+        HorizontalLayout content = new HorizontalLayout(grid);
+        content.setFlexGrow(1, grid);
+//        content.setFlexGrow(1, form);
         content.addClassName("content");
         content.setSizeFull();
         return content;
@@ -67,6 +67,8 @@ public class HomeView extends VerticalLayout {
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
 
         Button newSetButton = new Button("New Set");
+        newSetButton.addClickListener(event -> newSetButton.getUI().ifPresent(ui -> ui.navigate("newSet")));
+
         var toolbar = new HorizontalLayout(filterText, newSetButton);
         return toolbar;
     }

@@ -11,9 +11,9 @@ import com.vaadin.flow.data.binder.Binder;
 import java.util.List;
 
 public class QuestionContainer extends FormLayout {
-    private VerticalLayout parentLayout;
-    private Binder<Question> binder;
-    private List<QuestionContainer> questionContainers;
+    private final VerticalLayout parentLayout;
+    private final Binder<Question> binder;
+    private final List<QuestionContainer> questionContainers;
 
     public QuestionContainer(VerticalLayout parentLayout, List<QuestionContainer> questionContainers) {
         this.parentLayout = parentLayout;

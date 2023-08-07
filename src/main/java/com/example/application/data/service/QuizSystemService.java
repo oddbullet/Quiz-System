@@ -6,6 +6,7 @@ import com.example.application.data.repository.QuestionRepository;
 import com.example.application.data.repository.QuestionSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +33,9 @@ public class QuizSystemService {
     public void deleteSet(QuestionSet set) {
         questionSetRepository.delete(set);
     }
+
+    @Transactional
+    public QuestionSet findSetByName(String name) {return questionSetRepository.findByName(name);}
 
     public List<QuestionSet> findAllSet() {
         return questionSetRepository.findAll();

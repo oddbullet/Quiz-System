@@ -3,8 +3,10 @@ package com.example.application.views.list;
 import com.example.application.data.entity.Question;
 import com.example.application.data.entity.QuestionSet;
 import com.example.application.data.service.QuizSystemService;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -44,21 +46,52 @@ public class NewSetView extends VerticalLayout{
         });
 
         Button save = new Button("Save");
-        Button delete = new Button("Delete");
         Button cancel = new Button("Cancel");
 
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        cancel.addThemeVariants(ButtonVariant.LUMO_ERROR);
 
-        save.addClickListener(event -> saveSet(questionContainers));
+        save.addClickListener(event -> primeSetForSave(questionContainers));
+        cancel.addClickListener(event -> cancel.getUI().ifPresent(ui -> ui.navigate("home")));
 
-        return new HorizontalLayout(addQuestion, save, delete, cancel);
+        return new HorizontalLayout(addQuestion, save, cancel);
     }
 
-    private void saveSet(List<QuestionContainer> questionContainers) {
-        Set<Question> set = new HashSet<>();
-        System.out.println(setName.getValue());
+
+    private void primeSetForSave(List<QuestionContainer> questionContainers) {
+        QuestionSet existingSet = service.findSetByName(setName.getValue());
+        boolean[] cont = {true};
+
+        //Does set exist
+        if(existingSet == null) {
+            existingSet = new QuestionSet(setName.getValue(), new HashSet<>(), 0);
+            saveSet(existingSet, questionContainers);
+
+        } else {
+            QuestionSet[] finalSet = {existingSet};
+            ConfirmDialog dialog = new ConfirmDialog();
+            dialog.setHeader("Confirmation");
+            dialog.setText(new Html("<p>Overwrite current set?</p>"));
+
+            dialog.setCancelable(true);
+            dialog.setConfirmText("Continue");
+
+            dialog.addCancelListener(event -> dialog.close());
+
+            dialog.addConfirmListener(event -> {
+                dialog.close();
+                saveSet(finalSet[0], questionContainers);
+            });
+
+            dialog.open();
+        }
+    }
+
+    private void saveSet(QuestionSet existingSet, List<QuestionContainer> questionContainers) {
+
+        Set<Question> set = existingSet.getQuestions();
+        set.clear();
+
         for (QuestionContainer container : questionContainers) {
             Question question = new Question();
             try {
@@ -67,10 +100,8 @@ public class NewSetView extends VerticalLayout{
             } catch (ValidationException e) {
                 e.printStackTrace();
             }
-            System.out.println(question.getQuestionText());
         }
-        System.out.println();
-        QuestionSet questionSet = new QuestionSet(setName.getValue(), set, set.size());
-        service.saveSet(questionSet);
+        existingSet.setNumberOfQuestion(set.size());
+        service.saveSet(existingSet);
     }
 }

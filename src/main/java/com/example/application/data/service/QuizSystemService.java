@@ -1,6 +1,5 @@
 package com.example.application.data.service;
 
-import com.example.application.data.entity.Question;
 import com.example.application.data.entity.QuestionSet;
 import com.example.application.data.repository.QuestionRepository;
 import com.example.application.data.repository.QuestionSetRepository;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuizSystemService {
@@ -36,6 +36,8 @@ public class QuizSystemService {
 
     @Transactional
     public QuestionSet findSetByName(String name) {return questionSetRepository.findByName(name);}
+
+    public Optional<QuestionSet> findSetById(Long id) {return  questionSetRepository.findById(id);}
 
     public List<QuestionSet> findAllSet() {
         return questionSetRepository.findAll();

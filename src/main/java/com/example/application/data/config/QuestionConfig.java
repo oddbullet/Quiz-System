@@ -3,16 +3,22 @@ package com.example.application.data.config;
 import com.example.application.data.entity.Question;
 import com.example.application.data.entity.QuestionSet;
 import com.example.application.data.repository.QuestionSetRepository;
+import com.example.application.data.service.QuizSystemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Configuration
 public class QuestionConfig {
+
+
 
 
     @Bean
@@ -21,6 +27,7 @@ public class QuestionConfig {
             System.out.println("Command line running...");
             Set<Question> one = new HashSet<>();
             Set<Question> two = new HashSet<>();
+
 
             Question q1 = new Question("What is your name?",
                     "Bill",
@@ -43,12 +50,12 @@ public class QuestionConfig {
                     "5 ft 4in"
 
             );
-            one.addAll(List.of(q1, q2));
-            two.addAll(List.of(q1, q2, q3));
+            one.addAll(List.of(q1));
+            two.addAll(List.of( q2, q3));
 
             QuestionSet oneSet = new QuestionSet("Set One", one, one.size());
             QuestionSet twoSet = new QuestionSet("Set two", two, two.size());
             repository.saveAll(List.of(oneSet, twoSet));
-        };
-    }
+    };
+}
 }

@@ -21,7 +21,6 @@ import java.util.Collections;
 public class HomeView extends VerticalLayout {
     Grid<QuestionSet> grid = new Grid<>(QuestionSet.class);
     TextField filterText = new TextField();
-    QuizForm form;
     QuizSystemService service;
 
     public HomeView(QuizSystemService service) {
@@ -30,7 +29,6 @@ public class HomeView extends VerticalLayout {
         addClassName("list-view");
         setSizeFull();
         configureGrid();
-        configureForm();
         add(getToolbar(), getContent());
 
         updateList();
@@ -39,7 +37,6 @@ public class HomeView extends VerticalLayout {
     private HorizontalLayout getContent() {
         HorizontalLayout content = new HorizontalLayout(grid);
         content.setFlexGrow(1, grid);
-//        content.setFlexGrow(1, form);
         content.addClassName("content");
         content.setSizeFull();
         return content;
@@ -49,16 +46,16 @@ public class HomeView extends VerticalLayout {
         grid.addClassName("questionSet-grid");
         grid.setSizeFull();
         grid.setColumns("name", "numberOfQuestion");
-        grid.addComponentColumn(quiz -> {
+
+        grid.addComponentColumn(set -> {
+            QuestionSet questionSet = set;
            Button startButton = new Button("Start");
+           startButton.addClickListener(event -> {
+               startButton.getUI().ifPresent(ui -> ui.navigate("quiz/" + questionSet.getId()));
+           });
            return startButton;
         });
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
-    }
-
-    private void configureForm() {
-        form = new QuizForm(Collections.emptyList());
-        form.setWidth("25em");
     }
 
     private HorizontalLayout getToolbar() {

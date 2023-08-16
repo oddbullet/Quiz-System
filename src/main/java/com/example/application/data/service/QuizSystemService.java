@@ -42,4 +42,12 @@ public class QuizSystemService {
     public List<QuestionSet> findAllSet() {
         return questionSetRepository.findAll();
     }
+
+    public List<QuestionSet> findAllQuestionSet(String stringFilter) {
+        if (stringFilter == null || stringFilter.isEmpty()) {
+            return questionSetRepository.findAll();
+        } else {
+            return questionSetRepository.searchByName(stringFilter);
+        }
+    }
 }

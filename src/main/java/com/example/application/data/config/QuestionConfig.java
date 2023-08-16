@@ -3,23 +3,16 @@ package com.example.application.data.config;
 import com.example.application.data.entity.Question;
 import com.example.application.data.entity.QuestionSet;
 import com.example.application.data.repository.QuestionSetRepository;
-import com.example.application.data.service.QuizSystemService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Configuration
 public class QuestionConfig {
-
-
-
 
     @Bean
     CommandLineRunner commandLineRunner (QuestionSetRepository repository) {
@@ -27,7 +20,6 @@ public class QuestionConfig {
             System.out.println("Command line running...");
             Set<Question> one = new HashSet<>();
             Set<Question> two = new HashSet<>();
-
 
             Question q1 = new Question("What is your name?",
                     "Bill",

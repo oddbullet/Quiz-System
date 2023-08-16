@@ -4,6 +4,7 @@ import com.example.application.data.entity.QuestionSet;
 import com.example.application.data.service.QuizSystemService;
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -48,13 +49,25 @@ public class HomeView extends VerticalLayout {
         grid.setColumns("name", "numberOfQuestion");
 
         grid.addComponentColumn(set -> {
+            HorizontalLayout layout = new HorizontalLayout();
             QuestionSet questionSet = set;
-           Button startButton = new Button("Start");
-           startButton.addClickListener(event -> {
-               startButton.getUI().ifPresent(ui -> ui.navigate("quiz/" + questionSet.getId()));
-           });
-           return startButton;
+
+            Button startButton = new Button("Start");
+            Button deleteButton = new Button("Delete");
+
+            startButton.addClickListener(event -> {
+                startButton.getUI().ifPresent(ui -> ui.navigate("quiz/" + questionSet.getId()));
+            });
+
+            deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            deleteButton.addClickListener( event -> {
+                service.deleteSet(questionSet);
+                updateList();
+            });
+            layout.add(startButton, deleteButton);
+            return layout;
         });
+
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
@@ -62,6 +75,7 @@ public class HomeView extends VerticalLayout {
         filterText.setPlaceholder("Filter by name...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
+        filterText.addValueChangeListener(event -> updateList());
 
         Button newSetButton = new Button("New Set");
         newSetButton.addClickListener(event -> newSetButton.getUI().ifPresent(ui -> ui.navigate("newSet")));
@@ -71,6 +85,6 @@ public class HomeView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(service.findAllSet());
+        grid.setItems(service.findAllQuestionSet(filterText.getValue()));
     }
 }
